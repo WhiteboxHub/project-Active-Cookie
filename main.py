@@ -3,8 +3,9 @@ import argparse
 import sys
 import logging
 from src.cookie_analyzer import read_log_file, get_most_active_cookies
+from datetime import datetime
 
-# Configure logging
+# Configure logging to file
 logging.basicConfig(
     filename="app.log",        # log file
     filemode="a",              # append to existing log
@@ -17,24 +18,15 @@ def main():
     parser = argparse.ArgumentParser(
         description="Find most active cookie(s) for a given date."
     )
-    parser.add_argument(
-        "-f", "--file",
-        required=True,
-        help="Path to cookie log CSV file."
-    )
-    parser.add_argument(
-        "-d", "--date",
-        required=True,
-        help="Date in YYYY-MM-DD format (UTC)."
-    )
+    parser.add_argument("-f", "--file", required=True, help="Path to cookie log CSV file.")
+    parser.add_argument("-d", "--date", required=True, help="Date in YYYY-MM-DD format (UTC).")
     args = parser.parse_args()
 
-    # Validate date format early
+    # Validate date format
     try:
-        import datetime
-        datetime.datetime.strptime(args.date, "%Y-%m-%d")
+        datetime.strptime(args.date, "%Y-%m-%d")
     except ValueError:
-        logging.error("Invalid date format. Use YYYY-MM-DD.")
+        logging.error(f"Invalid date format: {args.date}. Use YYYY-MM-DD.")
         sys.exit(1)
 
     # Read file with error handling
@@ -50,23 +42,24 @@ def main():
         logging.error(f"Unexpected error reading file {args.file}: {e}")
         sys.exit(1)
 
-    # Get most active cookies
+    # Process cookies
     try:
         most_active = get_most_active_cookies(cookies, args.date)
     except Exception as e:
         logging.error(f"Error processing cookies: {e}")
         sys.exit(1)
 
-    # Print results
+    # Output results
     if not most_active:
         logging.info(f"No cookies found for date: {args.date}")
     else:
         for cookie in most_active:
-            print(cookie)
+            print(cookie)  # keep stdout clean for results
+        logging.info(f"Processed file {args.file} for date {args.date}: {len(most_active)} most active cookie(s) found")
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        logging.warning("Execution interrupted by user.")
-        sys.exit(130)  # Standard code for Ctrl+C termination
+        logging.warning("Execution interrupted by user (Ctrl+C).")
+        sys.exit(130)
