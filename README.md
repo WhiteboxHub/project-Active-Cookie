@@ -138,24 +138,14 @@ pytest --cov=src tests/
 
 ---
 
-## ✅ Production-Ready Features
+## Production-Ready Features
 
 1. Robust **error handling** (file, CSV, date format, keyboard interrupts)
 2. **Logging** for traceability
 3. Clean **CLI interface** with argparse
 4. **Modular design**: logic separated in `cookie_analyzer.py`
 5. Fully **testable** with `pytest`
-6. Supports **batch processing** through `run_all.sh`
 
 ---
 
-## 🔧 Extensibility
 
-* Can easily add **output to file** (`--output` option)
-* Support for **date ranges** or **multiple dates**
-* Scalable to **large CSV files** using streaming/chunking
-* Integration with **APIs or pipelines**
-
----
-
-Would you like me to also **write a `run_all.ps1` PowerShell script** for Windows users, equivalent to your `run_all.sh`? This is helpful if your team is on Windows.

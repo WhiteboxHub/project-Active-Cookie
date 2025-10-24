@@ -5,11 +5,11 @@ def read_log_file(filename):
     
     records = []
     with open(filename, "r") as file:
-        next(file)  # skip header
+        next(file)  
         for line in file:
             parts = line.strip().split(",")
             if len(parts) != 2:
-                continue  # skip malformed lines
+                continue  
             cookie, timestamp = parts
             try:
                 dt = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
